@@ -1,24 +1,652 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RN7-5S-Bf4">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Search Recipe View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SearchRecipeViewController" customModule="RecipeSearch" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="E01-2d-5p4" userLabel="Search Bar Stack View">
+                                <rect key="frame" x="20.666666666666657" y="353" width="373.33333333333337" height="30"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Hungry for..." adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ixv-Db-snK">
+                                        <rect key="frame" x="0.0" y="0.0" width="343.33333333333331" height="30"/>
+                                        <color key="textColor" red="0.94901960784313721" green="0.5490196078431373" blue="0.4392156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X0D-I8-wXm">
+                                        <rect key="frame" x="343.33333333333331" y="0.0" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="ZRG-MP-WwA" userLabel="width = 30"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" image="Search">
+                                            <color key="titleColor" red="0.2784313725" green="0.81176470590000005" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="w2i-oY-Jo5" kind="show" identifier="searchResultsSegue" id="hft-6T-Doj"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="s9F-fP-aMN"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="MAK-c3-yID" userLabel="Recipe Preferences Button Stack View">
+                                <rect key="frame" x="96.333333333333329" y="391" width="221.66666666666669" height="20"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calories, Diet, Ingredients" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2O-Gi-0Hc">
+                                        <rect key="frame" x="0.0" y="0.0" width="196.66666666666666" height="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.27843137254901962" green="0.81568627450980391" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="down_arrow" translatesAutoresizingMaskIntoConstraints="NO" id="vZl-Oq-Pt6">
+                                        <rect key="frame" x="201.66666666666669" y="0.0" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="Wmt-pM-EV2"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="Xfg-ga-xc4" userLabel="height = 20"/>
+                                </constraints>
+                            </stackView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UnX-Sa-NhR">
+                                <rect key="frame" x="8" y="419" width="398" height="280"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="O4k-A8-GZZ" userLabel="Recipe Preferences Stack">
+                                        <rect key="frame" x="0.0" y="0.0" width="398" height="313"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Gsp-an-3Q8" userLabel="Calories Ingredients Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="398" height="80.333333333333329"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Ohf-Lm-VMV" userLabel="Calories Stack">
+                                                        <rect key="frame" x="0.0" y="0.0" width="199" height="80.333333333333329"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calories" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ca9-Q8-5Yz">
+                                                                <rect key="frame" x="0.0" y="0.0" width="67.333333333333329" height="20.333333333333332"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="z7e-1P-CqA">
+                                                                <rect key="frame" x="0.0" y="20.333333333333314" width="166" height="30"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CwH-4Q-g2B">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="30"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vhc-hg-t3W">
+                                                                        <rect key="frame" x="86" y="0.0" width="80" height="30"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="80" id="H5E-Ye-Pbc"/>
+                                                                        </constraints>
+                                                                        <nil key="textColor"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                    </textField>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="8c1-ca-Wqg">
+                                                                <rect key="frame" x="0.0" y="50.333333333333314" width="166" height="30"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JLt-ep-XOk">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="30"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zBY-fX-Nny">
+                                                                        <rect key="frame" x="86" y="0.0" width="80" height="30"/>
+                                                                        <nil key="textColor"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                    </textField>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="zBY-fX-Nny" firstAttribute="leading" secondItem="Vhc-hg-t3W" secondAttribute="leading" id="8Jb-uc-OTH"/>
+                                                            <constraint firstItem="zBY-fX-Nny" firstAttribute="width" secondItem="Vhc-hg-t3W" secondAttribute="width" id="G8C-3N-bMh"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="OHy-Y3-1JY" userLabel="Ingredients Stack">
+                                                        <rect key="frame" x="199" y="0.0" width="199" height="50.333333333333336"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredients" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gI-ih-6Uq">
+                                                                <rect key="frame" x="0.0" y="0.0" width="93.666666666666671" height="20.333333333333332"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="roJ-Pd-A4d">
+                                                                <rect key="frame" x="0.0" y="20.333333333333314" width="166" height="30"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Up to" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQk-II-eIk">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="30"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JT7-jy-9ru">
+                                                                        <rect key="frame" x="86" y="0.0" width="80" height="30"/>
+                                                                        <nil key="textColor"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                    </textField>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="JT7-jy-9ru" firstAttribute="width" secondItem="Vhc-hg-t3W" secondAttribute="width" id="oY1-ao-m53"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="FKD-5c-1sZ" userLabel="Diet Stack View">
+                                                <rect key="frame" x="0.0" y="86.333333333333314" width="398" height="89.333333333333314"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WAo-zV-art">
+                                                        <rect key="frame" x="0.0" y="0.0" width="33.333333333333336" height="20.333333333333332"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="GYp-E5-IIF">
+                                                        <rect key="frame" x="0.0" y="26.333333333333314" width="398" height="63"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Kbt-sM-7Da">
+                                                                <rect key="frame" x="0.0" y="0.0" width="199" height="63"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="k9G-2k-e4f">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="103" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DaJ-3m-xYJ" userLabel="Vegeterian Checbox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="103" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Vegeterian" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" title="Vegeterian" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="61T-rR-p0q"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="K2G-mE-nWM">
+                                                                        <rect key="frame" x="0.0" y="21" width="69" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1N-Lh-rok" userLabel="Vegan Checkbox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="69" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Vegan" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zbq-vz-pwE"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-2p-O6H">
+                                                                        <rect key="frame" x="0.0" y="42" width="62" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKd-Zl-0DT" userLabel="Paleo CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="62" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Paleo" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GQi-IK-9j7"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="WQl-nC-0qn">
+                                                                <rect key="frame" x="199" y="0.0" width="199" height="42"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Vl7-NG-KD9">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="106" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Kq-Oa-n7k" userLabel="Sugar-Free Checkbox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="106" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Sugar-Free" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="J2V-qd-d0U"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="zg1-tJ-jaZ">
+                                                                        <rect key="frame" x="0.0" y="21" width="119" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Psd-f4-9We" userLabel="Alcohol-Free CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="119" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Alcohol-Free" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BgE-2M-R5X"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="GYp-E5-IIF" firstAttribute="width" secondItem="FKD-5c-1sZ" secondAttribute="width" id="wyZ-iT-YE5"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="9dC-bC-ODr" userLabel="Allergies Stack View">
+                                                <rect key="frame" x="0.0" y="181.66666666666663" width="398" height="131.33333333333337"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allergies" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moO-hk-yoy">
+                                                        <rect key="frame" x="0.0" y="0.0" width="72" height="20.333333333333332"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="S06-9q-RyG">
+                                                        <rect key="frame" x="0.0" y="26.333333333333371" width="398" height="105"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="VpL-SU-n0N">
+                                                                <rect key="frame" x="0.0" y="0.0" width="199" height="105"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="GFa-Gc-IL4">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="71" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTj-aY-Dec" userLabel="Gluten CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="71" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Gluten" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kH5-QG-fMS"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="4DO-uJ-ggg">
+                                                                        <rect key="frame" x="0.0" y="21" width="60" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q75-dU-BL9" userLabel="Dairy Checkbox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Dairy" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dKH-vQ-SFk"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="FsZ-aN-LHO">
+                                                                        <rect key="frame" x="0.0" y="42" width="59" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1WB-rN-o96" userLabel="Eggs Checkbox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="59" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Eggs" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6mU-hT-Qxc"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="E6C-Eb-yxb">
+                                                                        <rect key="frame" x="0.0" y="63" width="49" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Exe-OC-l90" userLabel="Soy CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="49" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Soy" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nBr-pM-ItJ"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="QU5-4A-GSu">
+                                                                        <rect key="frame" x="0.0" y="84" width="70" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="14" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9PI-F3-Y5V" userLabel="Wheat CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="70" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Wheat" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pO4-81-C7G"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="QMN-VG-7Dz">
+                                                                <rect key="frame" x="199" y="0.0" width="199" height="84"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Jps-SP-X0G">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="52" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="15" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TxG-l9-Wqo" userLabel="Fish CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="52" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Fish" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZKh-Xx-q3Y"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="ctY-x5-Id6">
+                                                                        <rect key="frame" x="0.0" y="21" width="86" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="16" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wWP-7g-drW" userLabel="Shellfish CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="86" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Shellfish" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gDG-ub-Pcq"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="XWo-f1-X68">
+                                                                        <rect key="frame" x="0.0" y="42" width="92" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="17" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L5Y-r9-RCM" userLabel="Tree nuts CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="92" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Tree nuts" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qJg-2Q-uWu"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="npQ-XV-Ieu">
+                                                                        <rect key="frame" x="0.0" y="63" width="82" height="21"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" tag="18" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBJ-Wn-AE0" userLabel="Peanuts CheckBox Button">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="82" height="21"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <state key="normal" title="Peanuts" image="icon-unchecked">
+                                                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                </state>
+                                                                                <state key="selected" image="icon-checked"/>
+                                                                                <connections>
+                                                                                    <action selector="checkboxPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kT9-eF-y3P"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="S06-9q-RyG" firstAttribute="width" secondItem="9dC-bC-ODr" secondAttribute="width" id="kzV-V8-tZg"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="FKD-5c-1sZ" firstAttribute="leading" secondItem="O4k-A8-GZZ" secondAttribute="leading" id="8rw-LQ-oan"/>
+                                            <constraint firstItem="Gsp-an-3Q8" firstAttribute="leading" secondItem="O4k-A8-GZZ" secondAttribute="leading" id="FDU-iC-hT6"/>
+                                            <constraint firstAttribute="trailing" secondItem="FKD-5c-1sZ" secondAttribute="trailing" id="XiE-RY-htl" userLabel="trailing = Diet Stack View.trailing"/>
+                                            <constraint firstAttribute="trailing" secondItem="Gsp-an-3Q8" secondAttribute="trailing" id="dCX-7j-k3s"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="O4k-A8-GZZ" secondAttribute="bottom" id="e3U-wB-3Ro"/>
+                                    <constraint firstItem="O4k-A8-GZZ" firstAttribute="leading" secondItem="UnX-Sa-NhR" secondAttribute="leading" id="ew5-i9-A3L"/>
+                                    <constraint firstItem="O4k-A8-GZZ" firstAttribute="width" secondItem="UnX-Sa-NhR" secondAttribute="width" id="jMf-wR-wJV"/>
+                                    <constraint firstItem="O4k-A8-GZZ" firstAttribute="top" secondItem="UnX-Sa-NhR" secondAttribute="top" id="qXU-aM-9qL"/>
+                                    <constraint firstAttribute="trailing" secondItem="O4k-A8-GZZ" secondAttribute="trailing" id="un1-gf-lfG"/>
+                                </constraints>
+                            </scrollView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raS-Ox-ZKI">
+                                <rect key="frame" x="0.0" y="699" width="414" height="44"/>
+                                <items>
+                                    <barButtonItem title="Item" id="5yX-j5-Uyd" userLabel="clear"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="UnX-Sa-NhR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="1pY-Yy-CH4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UnX-Sa-NhR" secondAttribute="trailing" constant="8" id="2vN-WH-5RP"/>
+                            <constraint firstItem="raS-Ox-ZKI" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="7" id="79e-6S-80i"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="E01-2d-5p4" secondAttribute="trailing" constant="20" id="A3G-a4-VKg"/>
+                            <constraint firstItem="raS-Ox-ZKI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DZE-Ki-Y9T"/>
+                            <constraint firstItem="UnX-Sa-NhR" firstAttribute="bottom" secondItem="raS-Ox-ZKI" secondAttribute="top" id="F4p-tC-pMQ"/>
+                            <constraint firstItem="E01-2d-5p4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Fri-FN-Aap"/>
+                            <constraint firstItem="MAK-c3-yID" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Gzq-kO-aXA"/>
+                            <constraint firstItem="E01-2d-5p4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Vem-pO-mHk"/>
+                            <constraint firstItem="UnX-Sa-NhR" firstAttribute="top" secondItem="MAK-c3-yID" secondAttribute="bottom" constant="8" id="csg-uE-qLm"/>
+                            <constraint firstItem="MAK-c3-yID" firstAttribute="top" secondItem="E01-2d-5p4" secondAttribute="bottom" constant="8" id="mnS-wg-a9y"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="raS-Ox-ZKI" secondAttribute="trailing" id="wTA-Jm-qX5"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="b3U-8R-Fl1" appends="YES" id="FAB-su-W3p"/>
+                        </connections>
                     </view>
+                    <navigationItem key="navigationItem" id="cHs-Hn-QDi"/>
+                    <connections>
+                        <outlet property="clearFilter" destination="5yX-j5-Uyd" id="qP7-3Q-eax"/>
+                        <outlet property="fromTextField" destination="Vhc-hg-t3W" id="MVN-La-2PX"/>
+                        <outlet property="recipeSearchTextField" destination="ixv-Db-snK" id="51u-Nd-ouw"/>
+                        <outlet property="scrollView" destination="UnX-Sa-NhR" id="BGR-to-sHf"/>
+                        <outlet property="searchBarStack" destination="E01-2d-5p4" id="zo8-b5-xQ7"/>
+                        <outlet property="searchBarYPosition" destination="Vem-pO-mHk" id="YJF-KV-Eyd"/>
+                        <outlet property="searchButton" destination="X0D-I8-wXm" id="SOu-0E-JzM"/>
+                        <outlet property="searchFiltersStack" destination="MAK-c3-yID" id="iWx-NY-l8y"/>
+                        <outlet property="toTextField" destination="zBY-fX-Nny" id="S3b-ee-1le"/>
+                        <outlet property="toolBar" destination="raS-Ox-ZKI" id="9Kr-ib-H1J"/>
+                        <outlet property="upToTextField" destination="JT7-jy-9ru" id="Bpp-oK-uCc"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="DaJ-3m-xYJ" collectionClass="NSMutableArray" id="C1y-Ee-MRE"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="t1N-Lh-rok" collectionClass="NSMutableArray" id="TSW-KO-gIl"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="vKd-Zl-0DT" collectionClass="NSMutableArray" id="28v-sE-q8n"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="5Kq-Oa-n7k" collectionClass="NSMutableArray" id="ahE-Lr-osc"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="Psd-f4-9We" collectionClass="NSMutableArray" id="34p-ax-1fI"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="yTj-aY-Dec" collectionClass="NSMutableArray" id="e7v-AB-dqp"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="q75-dU-BL9" collectionClass="NSMutableArray" id="2Wh-Wk-7zB"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="1WB-rN-o96" collectionClass="NSMutableArray" id="z9a-Xa-PBH"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="Exe-OC-l90" collectionClass="NSMutableArray" id="90d-ZE-oSQ"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="9PI-F3-Y5V" collectionClass="NSMutableArray" id="btQ-w2-b6p"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="TxG-l9-Wqo" collectionClass="NSMutableArray" id="5ez-bs-KwB"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="wWP-7g-drW" collectionClass="NSMutableArray" id="f9v-J8-Zqn"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="L5Y-r9-RCM" collectionClass="NSMutableArray" id="clC-bn-1sW"/>
+                        <outletCollection property="checkBoxButtonCollection" destination="jBJ-Wn-AE0" collectionClass="NSMutableArray" id="vpH-Zz-9jx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="b3U-8R-Fl1">
+                    <connections>
+                        <action selector="userDidTapView:" destination="BYZ-38-t0r" id="LWe-2y-gG7"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="974" y="133"/>
+        </scene>
+        <!--Recipe Search Collection View-->
+        <scene sceneID="d0L-Z7-76h">
+            <objects>
+                <viewController id="w2i-oY-Jo5" customClass="RecipeSearchCollectionView" customModule="RecipeSearch" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vJc-OA-PtR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KTQ-sd-0sZ">
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zjl-74-ldO">
+                                    <size key="itemSize" width="208" height="206"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="recipesCollectionCell" id="WKB-2t-VMZ">
+                                        <rect key="frame" x="103" y="0.0" width="208" height="206"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="208" height="206"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LwT-Ix-ddn" userLabel="Recipe Title">
+                                                    <rect key="frame" x="8" y="16" width="0.0" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i9t-tB-Flq">
+                                                    <rect key="frame" x="0.0" y="0.0" width="208" height="208"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="i9t-tB-Flq" secondAttribute="height" multiplier="1:1" id="zbw-6T-7RG"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="rc5-kp-Rpv">
+                                                    <rect key="frame" x="8" y="177" width="192" height="20.333333333333343"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Cal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XgS-8l-zUd" userLabel="Calories">
+                                                            <rect key="frame" x="0.0" y="0.0" width="78" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHh-hn-G2d">
+                                                            <rect key="frame" x="94" y="0.0" width="4.3333333333333286" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingr" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ej1-3N-Ffk" userLabel="Ingredients">
+                                                            <rect key="frame" x="114.33333333333331" y="0.0" width="77.666666666666686" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="XgS-8l-zUd" firstAttribute="width" secondItem="ej1-3N-Ffk" secondAttribute="width" id="Dob-ls-rAW"/>
+                                                    </constraints>
+                                                </stackView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="rc5-kp-Rpv" secondAttribute="trailing" constant="8" id="0Dj-25-VuL"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LwT-Ix-ddn" secondAttribute="trailing" symbolic="YES" id="0HL-JQ-9Px"/>
+                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="top" secondItem="WKB-2t-VMZ" secondAttribute="top" id="1X0-6v-Vqv"/>
+                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" id="IVL-V5-wBP"/>
+                                            <constraint firstAttribute="trailing" secondItem="i9t-tB-Flq" secondAttribute="trailing" id="QYD-Xm-DCu"/>
+                                            <constraint firstItem="rc5-kp-Rpv" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" constant="8" id="WAm-Ae-FCJ"/>
+                                            <constraint firstItem="LwT-Ix-ddn" firstAttribute="top" secondItem="WKB-2t-VMZ" secondAttribute="topMargin" constant="8" id="aXT-Zb-d3Y"/>
+                                            <constraint firstItem="LwT-Ix-ddn" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" constant="8" id="clR-vS-1oR"/>
+                                            <constraint firstAttribute="bottom" secondItem="rc5-kp-Rpv" secondAttribute="bottom" constant="8" id="fY5-bI-9ou"/>
+                                        </constraints>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="hqz-ug-d1l" firstAttribute="bottom" secondItem="KTQ-sd-0sZ" secondAttribute="bottom" id="JcW-hS-5Ky"/>
+                            <constraint firstItem="hqz-ug-d1l" firstAttribute="trailing" secondItem="KTQ-sd-0sZ" secondAttribute="trailing" id="g4N-Sg-0fu"/>
+                            <constraint firstItem="KTQ-sd-0sZ" firstAttribute="top" secondItem="hqz-ug-d1l" secondAttribute="top" id="nPY-Sg-Ey1"/>
+                            <constraint firstItem="KTQ-sd-0sZ" firstAttribute="leading" secondItem="hqz-ug-d1l" secondAttribute="leading" id="nvC-jC-Jjp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hqz-ug-d1l"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="KTQ-sd-0sZ" id="cAD-Bf-5oG"/>
+                        <outlet property="flowLayout" destination="Zjl-74-ldO" id="xWK-8t-Toc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7VT-8t-M1r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1720.289855072464" y="133.69565217391306"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Jxg-DD-Ooa">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RN7-5S-Bf4" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="s6N-bS-JI2">
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="lQS-7A-H7d"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9fP-Jd-CvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.23188405797103" y="132.88043478260872"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Search" width="60" height="60"/>
+        <image name="down_arrow" width="170" height="170"/>
+        <image name="icon-checked" width="20" height="20"/>
+        <image name="icon-unchecked" width="20" height="20"/>
+    </resources>
 </document>
