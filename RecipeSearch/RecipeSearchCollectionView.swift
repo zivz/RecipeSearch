@@ -28,6 +28,8 @@ class RecipeSearchCollectionView: UIViewController, UICollectionViewDataSource, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("***************")
+        print("Restoring data")
         collectionView.restore()
         
         //Might be redundant
@@ -37,12 +39,44 @@ class RecipeSearchCollectionView: UIViewController, UICollectionViewDataSource, 
             }
             collectionView.reloadItems(at: indexPaths)
         }
+        
         updateData()
     }
     
     func updateData() {
+        print("Getting recipes from API")
         getRecipesFromAPI()
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        setItemSize()
+    }
+    
+    /*override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("called viewWillTransition")
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil) { _ in
+            self.flowLayout.invalidateLayout()
+            self.setItemSize()
+        }
+    }*/
+    
+    fileprivate func setItemSize() {
+        print("called setItemSize")
+        let space: CGFloat = 4.0
+        flowLayout.scrollDirection = .vertical
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        
+        let cellsPerRow: CGFloat = 2.0
+        
+        let widthAvailableForCellsInRow = (collectionView.frame.size.width) - (cellsPerRow - 1.0) * space
+        
+        flowLayout.itemSize = CGSize(width: widthAvailableForCellsInRow / cellsPerRow, height: widthAvailableForCellsInRow / cellsPerRow)
+    }
+    
     
     func getRecipesFromAPI() {
         
@@ -57,6 +91,7 @@ class RecipeSearchCollectionView: UIViewController, UICollectionViewDataSource, 
             }
             
             performUIUpdatesOnMain {
+                print("Got results from API")
                 self.recipeHits = results
                 self.collectionView.reloadData()
             }
@@ -88,17 +123,40 @@ class RecipeSearchCollectionView: UIViewController, UICollectionViewDataSource, 
         RecipeSearchClient.sharedInstance().getPhotoFromRecipe(recipe: recipeDictionary) { (data, error) in
             
             guard error == nil else {
+                print (error!.description)
                 print ("ERROR in getting photos")
                 return
             }
             
             guard let imageData = data else {
+                print ("no data in image data")
                 return
             }
             
             performUIUpdatesOnMain {
+                print ("populating image")
                 cell.recipeImageView?.contentMode = .scaleAspectFill
                 cell.recipeImageView?.image = UIImage(data: imageData as Data)
+                
+                let recipeTitle = self.recipeHits[indexPath.row].label ?? ""
+                let calories = self.recipeHits[indexPath.row].caloriesLabel ?? 0.0
+                var caloriesLabel = (String(format: "%.0f", calories))
+                caloriesLabel = caloriesLabel == "0" ? "Cal" : "Cal \(caloriesLabel)"
+                
+                var ingrCount = 0
+               
+                if let ingredientArray = self.recipeHits[indexPath.row].ingredientLines {
+                    ingrCount = ingredientArray.count
+                }
+                
+                let ingrLabel = ingrCount == 0 ? "Ingr" : "Ingr \(ingrCount)"
+                
+                print ("populating text")
+               
+                cell.recipeTitle.text = recipeTitle
+                cell.calLabel.text = caloriesLabel
+                cell.ingrLabel.text = ingrLabel
+                
                 self.setUI(cell, enabled: true)
             }
             

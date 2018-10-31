@@ -15,11 +15,6 @@ class RecipeSearchClient : NSObject {
     // shared session
     var session = URLSession.shared
     
-    // uniqueKey state
-    var uniqueKey: String? = nil
-    var objectId: String? = nil
-    //var students: [OTMStudent] = [OTMStudent]()
-    
     // MARK: Initalizires
     
     override init(){
@@ -38,8 +33,6 @@ class RecipeSearchClient : NSObject {
         
         if imageURL == "" {
             request = NSMutableURLRequest(url: recipeSearchURLFromParameters(parameters)) as URLRequest
-            print("**********This is the request********")
-            print(request)
         } else {
             request = URLRequest(url: URL(string: imageURL)!)
         }
@@ -71,7 +64,13 @@ class RecipeSearchClient : NSObject {
                 return
             }
             
-            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForGET)
+            if imageURL == "" {
+                self.convertDataWithCompletionHandler(data,        completionHandlerForConvertData: completionHandlerForGET)
+            } else {
+                //I don't want to convert the data to JSON when fetching an image
+                completionHandlerForGET(data as AnyObject, nil)
+            }
+            
         }
         
         /*7. Start the request */
@@ -80,175 +79,6 @@ class RecipeSearchClient : NSObject {
         return task
     }
     
-    // MARK: POST
-    /*func taskForPOSTMethod(_ method: String, _ apiHost: String, _ apiPath: String, parameters: [String:AnyObject], jsonBody: String, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
-        
-        /* 1. Set the parameters */
-        //let parameters = [String:AnyObject]()
-        
-        /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(url: otmURLFromParameters(parameters, apiHost, apiPath, withPathExtension: method))
-        request.httpMethod = "POST"
-        
-        if apiHost == Constants.Parse.ApiHost {
-            request.addValue(Constants.Parse.ApiKey, forHTTPHeaderField: HttpHeaderFields.Parse.APIKey)
-            request.addValue(Constants.Parse.AppId, forHTTPHeaderField: HttpHeaderFields.Parse.AppId)
-        } else {
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-        }
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonBody.data(using: String.Encoding.utf8)
-        
-        /* 4. Make the request */
-        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            
-            func sendError(_ error: String) {
-                print(error)
-                let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerForPOST(nil, NSError(domain: "taskForPOSTMethod", code: 1, userInfo: userInfo))
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                sendError("No Data was returned by the request!")
-                return
-            }
-            
-            var newData = data
-            
-            if apiHost == Constants.Udacity.ApiHost {
-                let range = Range(5..<data.count)
-                newData = data.subdata(in: range) /* subset response data! */
-            }
-            
-            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPOST)
-        }
-        
-        /*7. Start the request */
-        task.resume()
-        
-        return task
-    }
-    
-    // MARK: POST
-    func taskForPUTMethod(_ method: String, _ apiHost: String, _ apiPath: String, parameters: [String:AnyObject], jsonBody: String, completionHandlerForPUT: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
-        
-        /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(url: otmURLFromParameters(parameters, apiHost, apiPath, withPathExtension: method))
-        request.httpMethod = "PUT"
-        
-        if apiHost == Constants.Parse.ApiHost {
-            request.addValue(Constants.Parse.ApiKey, forHTTPHeaderField: HttpHeaderFields.Parse.APIKey)
-            request.addValue(Constants.Parse.AppId, forHTTPHeaderField: HttpHeaderFields.Parse.AppId)
-        } else {
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-        }
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonBody.data(using: String.Encoding.utf8)
-        
-        /* 4. Make the request */
-        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            
-            func sendError(_ error: String) {
-                print(error)
-                let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerForPUT(nil, NSError(domain: "taskForPUTMethod", code: 1, userInfo: userInfo))
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                sendError("No Data was returned by the request!")
-                return
-            }
-            
-            var newData = data
-            
-            if apiHost == Constants.Udacity.ApiHost {
-                let range = Range(5..<data.count)
-                newData = data.subdata(in: range) /* subset response data! */
-            }
-            
-            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPUT)
-        }
-        
-        /*7. Start the request */
-        task.resume()
-        
-        return task
-    }
-    
-    // MARK: POST
-    func taskForDeleteMethod(_ method: String, _ apiHost: String, _ apiPath: String, parameters: [String:AnyObject], completionHandlerForDelete: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
-        
-        /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(url: otmURLFromParameters(parameters, apiHost, apiPath, withPathExtension: method))
-        request.httpMethod = "DELETE"
-        
-        var xsrfCookie: HTTPCookie? = nil
-        let sharedCookieStorage = HTTPCookieStorage.shared
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-        
-        /* 4. Make the request */
-        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            
-            /*if let err = error as? URLError, err.code == URLError.Code.notConnectedToInternet {
-             self
-             }*/
-            
-            func sendError(_ error: String) {
-                print(error)
-                let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerForDelete(nil, NSError(domain: "taskForDeleteMethod", code: 1, userInfo: userInfo))
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                sendError("No Data was returned by the request!")
-                return
-            }
-            
-            var newData = data
-            
-            print("Got data")
-            
-            if apiHost == Constants.Udacity.ApiHost {
-                let range = Range(5..<data.count)
-                newData = data.subdata(in: range) /* subset response data! */
-                print("subset")
-            }
-            
-            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForDelete)
-        }
-        
-        /*7. Start the request */
-        task.resume()
-        
-        return task
-    }
-    */
     //MARK : Helpers
     
     // subsitute the key for the value that is contained within the method name

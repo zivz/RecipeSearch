@@ -105,6 +105,7 @@ extension RecipeSearchClient {
             static let Cautions = "cautions"
             static let IngredientLines = "ingredientLines"
             static let Ingredients = "ingredients"
+            static let Calories = "calories"
         }
         
     }

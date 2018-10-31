@@ -544,7 +544,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="recipesCollectionCell" id="WKB-2t-VMZ">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="recipesCollectionCell" id="WKB-2t-VMZ" customClass="RecipeCollectionViewCell" customModule="RecipeSearch" customModuleProvider="target">
                                         <rect key="frame" x="103" y="0.0" width="208" height="206"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -558,11 +558,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i9t-tB-Flq">
-                                                    <rect key="frame" x="0.0" y="0.0" width="208" height="208"/>
+                                                    <rect key="frame" x="5" y="5" width="198" height="198"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="i9t-tB-Flq" secondAttribute="height" multiplier="1:1" id="zbw-6T-7RG"/>
                                                     </constraints>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="uF6-hY-to2">
+                                                    <rect key="frame" x="94.333333333333329" y="94.333333333333329" width="20" height="20"/>
+                                                </activityIndicatorView>
                                                 <stackView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="rc5-kp-Rpv">
                                                     <rect key="frame" x="8" y="177" width="192" height="20.333333333333343"/>
                                                     <subviews>
@@ -593,17 +596,30 @@
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="rc5-kp-Rpv" secondAttribute="trailing" constant="8" id="0Dj-25-VuL"/>
-                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LwT-Ix-ddn" secondAttribute="trailing" symbolic="YES" id="0HL-JQ-9Px"/>
-                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="top" secondItem="WKB-2t-VMZ" secondAttribute="top" id="1X0-6v-Vqv"/>
-                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" id="IVL-V5-wBP"/>
-                                            <constraint firstAttribute="trailing" secondItem="i9t-tB-Flq" secondAttribute="trailing" id="QYD-Xm-DCu"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LwT-Ix-ddn" secondAttribute="trailing" constant="10" id="0HL-JQ-9Px"/>
+                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="top" secondItem="WKB-2t-VMZ" secondAttribute="top" constant="5" id="1X0-6v-Vqv"/>
+                                            <constraint firstItem="i9t-tB-Flq" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" constant="5" id="IVL-V5-wBP"/>
+                                            <constraint firstAttribute="trailing" secondItem="i9t-tB-Flq" secondAttribute="trailing" constant="5" id="QYD-Xm-DCu"/>
                                             <constraint firstItem="rc5-kp-Rpv" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" constant="8" id="WAm-Ae-FCJ"/>
                                             <constraint firstItem="LwT-Ix-ddn" firstAttribute="top" secondItem="WKB-2t-VMZ" secondAttribute="topMargin" constant="8" id="aXT-Zb-d3Y"/>
                                             <constraint firstItem="LwT-Ix-ddn" firstAttribute="leading" secondItem="WKB-2t-VMZ" secondAttribute="leading" constant="8" id="clR-vS-1oR"/>
                                             <constraint firstAttribute="bottom" secondItem="rc5-kp-Rpv" secondAttribute="bottom" constant="8" id="fY5-bI-9ou"/>
+                                            <constraint firstItem="uF6-hY-to2" firstAttribute="centerY" secondItem="i9t-tB-Flq" secondAttribute="centerY" id="gzC-Ax-d00"/>
+                                            <constraint firstItem="uF6-hY-to2" firstAttribute="centerX" secondItem="i9t-tB-Flq" secondAttribute="centerX" id="vq0-Xm-hAY"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="uF6-hY-to2" id="EFL-dv-r1m"/>
+                                            <outlet property="calLabel" destination="XgS-8l-zUd" id="wpd-ak-qSN"/>
+                                            <outlet property="ingrLabel" destination="ej1-3N-Ffk" id="F8d-eT-sQk"/>
+                                            <outlet property="recipeImageView" destination="i9t-tB-Flq" id="52S-T1-Pl5"/>
+                                            <outlet property="recipeTitle" destination="LwT-Ix-ddn" id="ImU-C3-ikP"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="w2i-oY-Jo5" id="r1e-9K-oZK"/>
+                                    <outlet property="delegate" destination="w2i-oY-Jo5" id="M0L-Lq-hOP"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

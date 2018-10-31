@@ -13,9 +13,11 @@ struct RecipeSearchHit {
     // -MARK: -Properties
     let uri: String?
     let label: String?
+    let caloriesLabel: Double?
     let imageURL: String?
     let url: String?
     let shareAs: String?
+    let ingredients: [[String:AnyObject]]?
     let ingredientLines: [String]?
     
     // MARK: -Initalizers
@@ -28,6 +30,8 @@ struct RecipeSearchHit {
         url = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.URL] as? String
         shareAs = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.ShareAs] as? String
         ingredientLines = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.IngredientLines] as? [String]
+        caloriesLabel = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Calories] as? Double
+        ingredients = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Ingredients] as? [[String:AnyObject]]
 
     }
     
