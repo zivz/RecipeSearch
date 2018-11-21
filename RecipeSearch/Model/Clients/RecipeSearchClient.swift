@@ -23,7 +23,7 @@ class RecipeSearchClient : NSObject {
     
     // MARK: GET
     
-    func taskForGETMethod(imageURL: String = "", parameters: [String:AnyObject], completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
+    func taskForGETMethod(imageURL: String = "", parameters: [String:AnyObject], urlQueryItems: [URLQueryItem], completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         //If Method is needed add in taskForGETMethod >>> _ method: String <<<
         
@@ -32,11 +32,11 @@ class RecipeSearchClient : NSObject {
         var request: URLRequest
         
         if imageURL == "" {
-            request = NSMutableURLRequest(url: recipeSearchURLFromParameters(parameters)) as URLRequest
+            request = NSMutableURLRequest(url: recipeSearchURLFromParameters(parameters,urlQueryItems)) as URLRequest
         } else {
             request = URLRequest(url: URL(string: imageURL)!)
         }
-       
+        
         /*4. Make the request */
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             
@@ -105,7 +105,7 @@ class RecipeSearchClient : NSObject {
     }
     
     // create a URL From Parameters
-    private func recipeSearchURLFromParameters(_ parameters: [String:AnyObject], _ url: String = "") -> URL {
+    private func recipeSearchURLFromParameters(_ parameters: [String:AnyObject], _ queryItems:[URLQueryItem]?, _ url: String = "") -> URL {
         
         var components = URLComponents()
         components.scheme = RecipeSearchClient.Constants.ApiScheme
@@ -120,6 +120,17 @@ class RecipeSearchClient : NSObject {
             let queryItem = URLQueryItem(name: key, value: "\(value)")
             print("Query item is : \(queryItem)")
             components.queryItems!.append(queryItem)
+        }
+        
+        if let queryItems = queryItems {
+            for item in queryItems {
+                if let value = item.value {
+                    let queryItem = URLQueryItem(name: item.name, value: "\(value)")
+                    print("Query item is : \(queryItem)")
+                    components.queryItems!.append(queryItem)
+                }
+                
+            }
         }
         
         return components.url!

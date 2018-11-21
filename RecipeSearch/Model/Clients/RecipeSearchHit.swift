@@ -17,8 +17,10 @@ struct RecipeSearchHit {
     let imageURL: String?
     let url: String?
     let shareAs: String?
+    let source: String?
     let ingredients: [[String:AnyObject]]?
     let ingredientLines: [String]?
+    var isFavorited: Bool
     
     // MARK: -Initalizers
     
@@ -29,10 +31,13 @@ struct RecipeSearchHit {
         imageURL = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Image] as? String
         url = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.URL] as? String
         shareAs = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.ShareAs] as? String
+        source = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Source] as? String
         ingredientLines = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.IngredientLines] as? [String]
         caloriesLabel = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Calories] as? Double
         ingredients = dictionary[RecipeSearchClient.JSONResponseKeys.Hit.Ingredients] as? [[String:AnyObject]]
-
+        
+        isFavorited = false
+        
     }
     
     static func recipeFromResults(_ results: [[String:AnyObject]]) -> [RecipeSearchHit] {
@@ -44,11 +49,6 @@ struct RecipeSearchHit {
             recipes.append(RecipeSearchHit(dictionary: result[RecipeSearchClient.JSONResponseKeys.Hit.Recipe] as! [String : AnyObject]))
         }
         
-        for recipe in recipes {
-            if let label = recipe.label {
-                print ("recipe label is ", label)
-            }
-        }
         return recipes
         
     }

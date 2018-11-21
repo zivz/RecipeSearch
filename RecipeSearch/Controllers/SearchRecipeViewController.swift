@@ -13,10 +13,24 @@ class SearchRecipeViewController: UIViewController {
     //MARK: -Properties
     
     var activeTextField : UITextField? = nil
-    var healthString: String = ""
+    var healthArray = [String]()
     var caloriesRange: String = ""
     var ingredientsString: String = ""
-    var healthArray = [String]()
+    
+    let checkboxesDictionary = [0:HealthLabels.Vegeterian.rawValue,
+                                1:HealthLabels.Vegan.rawValue,
+                                2:HealthLabels.Paleo.rawValue,
+                                3:HealthLabels.LowSugar.rawValue,
+                                4:HealthLabels.AlcoholFree.rawValue,
+                                10:HealthLabels.GlutenFree.rawValue,
+                                11:HealthLabels.DairyFree.rawValue,
+                                12:HealthLabels.Eggs.rawValue,
+                                13:HealthLabels.Eggs.rawValue,
+                                14:HealthLabels.Wheat.rawValue,
+                                15:HealthLabels.Fish.rawValue,
+                                16:HealthLabels.Shellfish.rawValue,
+                                17:HealthLabels.Treenuts.rawValue,
+                                18:HealthLabels.Peanuts.rawValue]
         
     fileprivate func handleSearchBarPosition(centered: Bool) {
         
@@ -73,12 +87,6 @@ class SearchRecipeViewController: UIViewController {
         
         clearFiltersButton.addTarget(self, action: #selector(resetCheckBoxes), for: .touchUpInside)
       
-        /*clearFiltersButton.setTitle(" Clear filters", for: .normal)
-        
-        clearFiltersButton.setTitle("", for: .disabled)
-        
-        clearFiltersButton.setTitleColor(UIColor(red: 23/255.0, green: 127/255.0, blue: 251/255.0, alpha: 1.0), for: .normal)*/
-        
         let close = UIBarButtonItem(customView: clearFiltersButton)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(filterResultsTapped(_:)))
@@ -112,7 +120,8 @@ class SearchRecipeViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(filterResultsTapped(_:)))
         searchFiltersStack.addGestureRecognizer(tap)
         configureUI()
-        
+        getCheckboxUserDefaults()
+    
     }
     
     //MARK: -Helpers
@@ -124,6 +133,7 @@ class SearchRecipeViewController: UIViewController {
         for checkbox in checkBoxButtonCollection {
             if checkbox.isSelected {
                 checkbox.isSelected = false
+                saveCheckboxDefaults(checkbox, isSelected: false)
                 checkbox.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             }
         }
@@ -135,30 +145,55 @@ class SearchRecipeViewController: UIViewController {
         
         if sender.isSelected {
             sender.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+            saveCheckboxDefaults(sender, isSelected: true)
         } else {
             sender.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            saveCheckboxDefaults(sender, isSelected: false)
         }
         
         updateFilterButton()
+    }
+    
+    func saveCheckboxDefaults(_ sender: UIButton, isSelected: Bool) {
+        let defaults = UserDefaults.standard
+        defaults.set(isSelected, forKey: String(sender.tag))
+    }
+    
+    func getCheckboxUserDefaults() {
+        let defaults = UserDefaults.standard
+        
+        for checkbox in checkBoxButtonCollection {
+            
+            if let isSelected = defaults.object(forKey: String(checkbox.tag)) {
+                checkbox.isSelected = isSelected as! Bool
+                checkbox.titleLabel?.font = checkbox.isSelected ? UIFont.boldSystemFont(ofSize: 17) : UIFont.systemFont(ofSize: 17)
+            }
+        }
+        
+        updateFilterButton()
+
+        
     }
     
     
     //MARK:- Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        /*let backButton = UIBarButtonItem(title: "OK", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-        
-        self.navigationItem.backBarButtonItem = backButton*/
-        
         if segue.identifier == "searchResultsSegue" {
-            if let searchResultsVC = segue.destination as? RecipeSearchCollectionView {
+            
+            if let barVC = segue.destination as? UITabBarController {
                 
-                if let searchQ = recipeSearchTextField.text, !searchQ.isEmpty {
-                    searchResultsVC.searchQ = searchQ
-                }
-                searchResultsVC.healthString = populateHealthParams()
-                searchResultsVC.caloriesRange = handleCaloriesRange()
-                searchResultsVC.ingredientsString = handleIngredients()
+                let searchResultsVC = barVC.viewControllers![0] as! RecipeSearchCollectionView
+                
+                    if let searchQ = recipeSearchTextField.text, !searchQ.isEmpty {
+                        searchResultsVC.searchQ = searchQ
+                    }
+                
+                    searchResultsVC.healthArray = populateHealthParams()
+                    searchResultsVC.caloriesRange = handleCaloriesRange()
+                    searchResultsVC.ingredientsString = handleIngredients()
+                    searchResultsVC.newSearch = true
+                
             }
         }
     }
@@ -181,7 +216,6 @@ class SearchRecipeViewController: UIViewController {
             else if fromText.isEmpty && toText.isEmpty {
                 return fromText
             }
-            // !fromText.isEmpty && !toText.isEmpty
             else {
                 if (Int(fromText)! > Int(toText)!) {
                     return "\(toText)-\(fromText)"
@@ -193,50 +227,18 @@ class SearchRecipeViewController: UIViewController {
         return ""
     }
     
-    func populateHealthParams() -> String {
+    func populateHealthParams() -> [String] {
         
         for checkbox in checkBoxButtonCollection {
             if checkbox.isSelected {
-                switch checkbox.tag {
-                case 0 :
-                    healthArray.append("vegeterian")
-                case 1 :
-                    healthArray.append("vegan")
-                case 2 :
-                    healthArray.append("paleo")
-                case 3 :
-                    healthArray.append("low-sugar")
-                case 4 :
-                    healthArray.append("alcohol-free")
-                case 10:
-                    healthArray.append("gluten-free")
-                case 11:
-                    healthArray.append("dairy-free")
-                case 12:
-                    healthArray.append("eggs-free")
-                case 13:
-                    healthArray.append("soy-free")
-                case 14:
-                    healthArray.append("wheat-free")
-                case 15:
-                    healthArray.append("fish-free")
-                case 16:
-                    healthArray.append("shellfish-free")
-                case 17:
-                    healthArray.append("tree-nut-free")
-                case 18:
-                    healthArray.append("peanut-free")
-                default:
-                    continue
+                if let checkboxValue = checkboxesDictionary[checkbox.tag] {
+                    healthArray.append(checkboxValue)
                 }
+                
             }
         }
-        return healthArray.joined(separator: ",")
+        return healthArray
     }
-    
-    
-    
-    
     
 }
 
@@ -318,8 +320,6 @@ extension SearchRecipeViewController: UITextFieldDelegate {
         return true
     }
     
-
-    
     //MARK: Show/Hide Keyboard
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -329,9 +329,9 @@ extension SearchRecipeViewController: UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        //TODO: -Handle what's needed when keyboard hides
-        //view.frame.origin.y = 0
-        //mapIconImageView.isHidden = false
+        if let activeTextField = self.activeTextField, activeTextField == recipeSearchTextField {
+            handleSearchBarPosition(centered: true)
+        }
     }
     
     private func keyboardHeight(_ notification: Notification) -> CGFloat {
@@ -365,32 +365,10 @@ extension SearchRecipeViewController: UITextFieldDelegate {
 
 }
 
-//TODO: -Example for handling special button
-
-//let backImage = UIImage(named: "icon_back-arrow")
-//self.navigationController?.navigationBar.backIndicatorImage = backImage
-//self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
-//
-//let backButton = UIBarButtonItem(title: "Add Location", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-//
-//backButton.setTitleTextAttributes(
-//    [NSAttributedStringKey.foregroundColor: UIColor.UdacityColorLight, NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 13.0)], for: .normal)
-//
-//self.navigationItem.backBarButtonItem = backButton
 
 private extension SearchRecipeViewController {
     
     func configureTextField(_ textField: UITextField) {
-//        let textFieldPaddingViewFrame = CGRect(x: 0.0, y: 0.0, width: 6.0, height: 0.0)
-//        let textFieldPaddingView = UIView(frame: textFieldPaddingViewFrame)
-//        textField.leftView = textFieldPaddingView
-//        textField.leftViewMode = .always
-//        textField.backgroundColor = UIColor.white
-//
-//        textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [
-//            .foregroundColor: UIColor.brown,
-//            .font: UIFont.systemFont(ofSize: 14.0)
-//            ])
         
         if textField != recipeSearchTextField {
             textField.keyboardType = .numberPad
@@ -413,5 +391,22 @@ private extension SearchRecipeViewController {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
     }
+}
+
+enum HealthLabels: String {
+    case Vegeterian = "vegetarian"
+    case Vegan = "vegan"
+    case Paleo = "paleo"
+    case LowSugar = "low-sugar"
+    case AlcoholFree = "alcohol-free"
+    case GlutenFree = "gluten-free"
+    case DairyFree = "dairy-free"
+    case Eggs = "eggs-free"
+    case Soy = "soy-free"
+    case Wheat = "wheat-free"
+    case Fish = "fish-free"
+    case Shellfish = "shellfish-free"
+    case Treenuts = "tree-nut-free"
+    case Peanuts = "peanut-free"
 }
 
