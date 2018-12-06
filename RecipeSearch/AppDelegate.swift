@@ -18,10 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         dataController.load()
         
-        let detailVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "recipeDetailedVC") as! RecipeDetailedViewController
+        //TODO: -pass here dataController to SearchRecipeViewController
         
-        detailVC.dataController = dataController
-
+        let navigationController = window?.rootViewController as! UINavigationController
+        
+        let searchVC = navigationController.topViewController as! SearchRecipeViewController
+        
+        searchVC.dataController = dataController
+        
         return true
     }
 

@@ -18,10 +18,12 @@ class RecipeSearchCollectionView: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var warningImage: UIImageView!
     
+    var dataController: DataController!
+    
     //MARK: -Properties
     var recipeHits = [RecipeSearchHit]()
     var selectedRecipe: RecipeSearchHit?
-    var selectedImage: UIImage?
+    var selectedImage: Data?
     var searchQ: String = ""
     var healthArray = [String]()
     var caloriesRange: String = ""
@@ -31,6 +33,7 @@ class RecipeSearchCollectionView: UIViewController {
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         if let newSearch = newSearch, newSearch {
             collectionView.restore()
             updateData()
@@ -59,7 +62,7 @@ class RecipeSearchCollectionView: UIViewController {
             guard error == nil else {
                 performUIUpdatesOnMain {
                     self.setCollectionViewUI(enabled: true)
-                    self.collectionView.setEmptyMessage(error!)
+                    self.collectionView.setEmptyMessage(error!.description)
                     self.warningImage.isHidden = false
                 }
                 return
@@ -135,8 +138,19 @@ class RecipeSearchCollectionView: UIViewController {
         
         if segue.identifier == "recipeDetailSegue" {
             if let detailVC = segue.destination as? RecipeDetailedViewController {
-                detailVC.recipeHit = selectedRecipe
+                
+                guard let selectedRecipe = selectedRecipe else {
+                    return
+                }
+                
+                detailVC.calories = selectedRecipe.caloriesLabel
+                detailVC.ingredients = selectedRecipe.ingredients
+                detailVC.ingredientLines = selectedRecipe.ingredientLines
+                detailVC.source = selectedRecipe.source
+                detailVC.recipeTitle = selectedRecipe.label
+                detailVC.recipeUrl = selectedRecipe.url
                 detailVC.image = selectedImage
+                detailVC.dataController = dataController
             }
         }
     }
@@ -173,7 +187,8 @@ extension RecipeSearchCollectionView : UICollectionViewDelegate {
         
         selectedRecipe = recipeHits[indexPath.row]
         let selectedCell = collectionView.cellForItem(at: indexPath) as! RecipeCollectionViewCell
-        selectedImage = selectedCell.recipeImageView.image
+        selectedImage = UIImagePNGRepresentation(selectedCell.recipeImageView.image!) as Data?
+        //selectedImage = selectedCell.recipeImageView
         performSegue(withIdentifier: "recipeDetailSegue", sender: nil)
         
     }

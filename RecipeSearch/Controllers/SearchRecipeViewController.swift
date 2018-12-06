@@ -17,6 +17,8 @@ class SearchRecipeViewController: UIViewController {
     var caloriesRange: String = ""
     var ingredientsString: String = ""
     
+    var dataController: DataController!
+    
     let checkboxesDictionary = [0:HealthLabels.Vegeterian.rawValue,
                                 1:HealthLabels.Vegan.rawValue,
                                 2:HealthLabels.Paleo.rawValue,
@@ -181,7 +183,9 @@ class SearchRecipeViewController: UIViewController {
         
         if segue.identifier == "searchResultsSegue" {
             
-            if let barVC = segue.destination as? UITabBarController {
+            if let barVC = segue.destination as? ResultsTabBarController {
+                
+                barVC.dataController = dataController
                 
                 let searchResultsVC = barVC.viewControllers![0] as! RecipeSearchCollectionView
                 

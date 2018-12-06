@@ -96,7 +96,7 @@ class RecipeSearchClient : NSObject {
         var parsedResult: AnyObject! = nil
         do {
             parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
-            print("Printing parsed Result", parsedResult)
+            //print("Printing parsed Result", parsedResult)
         } catch {
             let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
             completionHandlerForConvertData(nil, NSError(domain:"convertDataWithCompletionHandler", code: 1, userInfo: userInfo))

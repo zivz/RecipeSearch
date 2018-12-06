@@ -9,11 +9,31 @@
 import UIKit
 import CoreData
 
-class RecipeDetailedViewController: UIViewController, NSFetchedResultsControllerDelegate {
+class RecipeDetailedViewController: UIViewController {
 
     // MARK: - Properties
     var recipeHit: RecipeSearchHit?
-    var image: UIImage?
+    var calories: Double?
+    var recipeUrl: String?
+    var ingredientLines: [String]?
+    var ingredients: [[String:AnyObject]]?
+    var recipeTitle: String?
+    var source: String?
+    var image: Data?
+    
+    var isFavorited : Bool = false {
+        didSet {
+            if !isFavorited {
+                favoritesButton.setImage(UIImage(named: "heart-selected"), for: .normal)
+                favoritesButton.setTitle("  Add to Favorites", for: .normal)
+                favoritesButton.setTitleColor(UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0), for: .normal)
+            } else {
+                favoritesButton.setImage(UIImage(named: "heart-deselected"), for: .normal)
+                favoritesButton.setTitle("  Remove from Favorites", for: .normal)
+                favoritesButton.setTitleColor(UIColor.gray, for: .normal)
+            }
+        }
+    }
     
     @IBOutlet weak var recipeImage: UIImageView!
     @IBOutlet weak var recipeLabel: UILabel!
@@ -23,44 +43,43 @@ class RecipeDetailedViewController: UIViewController, NSFetchedResultsController
     @IBOutlet weak var recipeSource: UILabel!
     @IBOutlet weak var favoritesButton: UIButton!
     
-    var fetchedResultsController: NSFetchedResultsController<Recipe>!
     var dataController: DataController!
+    var fetchedResultsController: NSFetchedResultsController<Recipe>!
     
     fileprivate func setupFetchedResultsController() {
-        let fetchRequest: NSFetchRequest<Recipe> = Recipe.fetchRequest()
+        
+        let fetchRequest:NSFetchRequest<Recipe> = Recipe.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        guard let dataController = dataController else {
-            print ("data controller is nil")
-            return
-        }
-        
-        //it doesn't arrive here
-        
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "recipes")
         
-        fetchedResultsController.delegate = self
+        //fetchedResultsController.delegate = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("view did load been called")
-        recipeImage.image = image
         
-        if let recipeHitLabel = recipeHit?.label {
+        if let imageData = image {
+            recipeImage.image = UIImage(data: imageData)
+        } else {
+            recipeImage.image = UIImage(named: "recipeFallback")
+        }
+        
+        
+        if let recipeHitLabel = recipeTitle {
             recipeLabel.text = recipeHitLabel
         }
         
-        if let recipeHitIngr = recipeHit?.ingredientLines?.count {
+        if let recipeHitIngr = ingredientLines?.count {
             ingrLabel.text = "\(recipeHitIngr) INGREDIENTS"
         }
         
-        if let calQuantity = recipeHit?.caloriesLabel {
+        if let calQuantity = calories {
             calLabel.text = "\(String(format: "%.0f", calQuantity)) CALORIES"
         }
         
-        if let ingrLines = recipeHit?.ingredientLines {
+        if let ingrLines = ingredientLines {
             ingredientsText.text = ingrLines.joined(separator: "\n")
             let style = NSMutableParagraphStyle()
             style.lineSpacing = 8
@@ -69,52 +88,129 @@ class RecipeDetailedViewController: UIViewController, NSFetchedResultsController
             ingredientsText.attributedText = NSAttributedString(string: ingredientsText.text, attributes: attributes)
         }
         
-        if let source = recipeHit?.source {
+        if let source = source {
             recipeSource.text = source
             let tapURL = UITapGestureRecognizer(target: self, action: #selector(self.tapURLInLabel))
             recipeSource.isUserInteractionEnabled = true
             recipeSource.addGestureRecognizer(tapURL)
         }
         
-        guard let favorited = recipeHit?.isFavorited else {
-            return
-        }
+        setupFetchedResultsController()
         
-        if !favorited {
-            favoritesButton.setImage(UIImage(named: "heart-selected"), for: .normal)
-            favoritesButton.titleLabel?.text! = "  Add to Favorites"
-            
-        } else {
-            favoritesButton.setImage(UIImage(named: "heart-deselected"), for: .normal)
-            favoritesButton.titleLabel?.text! = "  Remove from Favorites"
-        }
-        //setupFetchedResultsController()
+        //TODO: -Grab here the state of the favorites button
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view will appear called")
         setupFetchedResultsController()
+        updateFavoritesButton()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        fetchedResultsController = nil
     }
     
     @objc func tapURLInLabel(sender:UITapGestureRecognizer) {
         
-        if let urlString = recipeHit?.url {
+        if let urlString = recipeUrl {
             if let url = URL(string: urlString) {
                 UIApplication.shared.open(url, options: [:])
             }
         }
     }
     
-    @IBAction func favoritesButtonTapped(_ sender: Any) {
-        
-        print("state of button was favorited? \(recipeHit?.isFavorited)")
-        
-        recipeHit?.isFavorited = !(recipeHit?.isFavorited)!
-        
-        print("state of button was changed ot favorited =\(recipeHit?.isFavorited)")
+    fileprivate func countCoreDataObjects() -> Int {
+        try? fetchedResultsController.performFetch()
+        return fetchedResultsController.fetchedObjects?.count ?? 0
     }
     
+    @IBAction func toggleFavorites(_ sender: Any) {
+        
+        let shouldFavorite = !isFavorited
+
+        let stringManipulate = shouldFavorite ? "add to favorites" : "remove from favorites"
+        
+        print("Number of Objects before '\(stringManipulate)' operation is \(countCoreDataObjects())")
+        
+        if shouldFavorite {
+            addToFavorites()
+        } else {
+            removeFromFavorites(recipeHit!)
+        }
+        
+        print("Number of Objects after '\(stringManipulate)' operation is \(countCoreDataObjects())")
+        
+        //toggle state back after core data been updated by remove/add
+        isFavorited = shouldFavorite
+        
+    }
+    
+    func addToFavorites() {
+        let recipe = Recipe(context: dataController.viewContext)
+        recipe.creationDate = Date()
+        recipe.recipeImage = image 
+        recipe.recipeUrl = recipeUrl
+        recipe.calories = calories ?? 0.0
+        recipe.ingredientLines = ingredientLines
+        recipe.ingredients = ingredients
+        recipe.source = source
+        recipe.recipeTitle = recipeTitle
+        
+        do {
+        try dataController.viewContext.save()
+        } catch {
+            print("Couldn't save object")
+        }
+    }
+    
+    func removeFromFavorites(_ hit: RecipeSearchHit) {
+     
+        guard let hitUrl = recipeUrl else {
+            print("hitURL is nil")
+            return
+        }
+        
+        try? fetchedResultsController.performFetch()
+        
+        for recipe in (fetchedResultsController.fetchedObjects)! {
+            
+            guard let recipeUrl = recipe.recipeUrl else {
+                print("recipeURL is nil")
+                return
+            }
+            
+            if hitUrl == recipeUrl {
+                print("Deleting object")
+                dataController.viewContext.delete(recipe)
+                try? dataController.viewContext.save()
+            }
+        }
+        
+    }
+    
+    func updateFavoritesButton() {
+        
+        guard let hitUrl = recipeHit?.url else {
+            isFavorited = false
+            return
+        }
+        
+        try? fetchedResultsController.performFetch()
+        for recipe in (fetchedResultsController.fetchedObjects)! {
+            
+            guard let recipeUrl = recipe.recipeUrl else {
+                isFavorited = false
+                return
+            }
+            
+            if hitUrl == recipeUrl {
+                isFavorited = true
+                return
+            }
+        }
+        isFavorited = false
+    }
     
     @IBAction func shareRecipe(_ sender: Any) {
         
@@ -141,9 +237,6 @@ class RecipeDetailedViewController: UIViewController, NSFetchedResultsController
         self.present(controller, animated: true, completion: nil)
         
     }
-    
-    
-
     
 
 }
